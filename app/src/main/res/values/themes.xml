@@ -30,5 +30,9 @@
         <!-- Customize your theme here. -->
         <item name="bottomNavigationStyle">@style/MyBottomNavigationView</item>
         <item name="appBarLayoutStyle">@style/Widget.MaterialComponents.AppBarLayout.Surface</item>
+        <item name="dividerColor">@color/gray</item>
+        <item name="android:textColorSecondary">@color/darkGray</item>
+        <item name="android:lineSpacingExtra">6dp</item>
+        <item name="android:includeFontPadding">false</item>
     </style>
 </resources>

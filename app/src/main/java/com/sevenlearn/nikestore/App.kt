@@ -1,11 +1,18 @@
 package com.sevenlearn.nikestore
 
 import android.app.Application
+import com.facebook.drawee.backends.pipeline.Fresco
+import com.sevenlearn.nikestore.data.repo.BannerRepository
+import com.sevenlearn.nikestore.data.repo.BannerRepositoryImpl
 import com.sevenlearn.nikestore.data.repo.ProductRepository
 import com.sevenlearn.nikestore.data.repo.ProductRepositoryImpl
+import com.sevenlearn.nikestore.data.repo.source.BannerRemoteDataSource
 import com.sevenlearn.nikestore.data.repo.source.ProductLocalDataSource
 import com.sevenlearn.nikestore.data.repo.source.ProductRemoteDataSource
 import com.sevenlearn.nikestore.feature.main.MainViewModel
+import com.sevenlearn.nikestore.feature.main.ProductListAdapter
+import com.sevenlearn.nikestore.services.FrescoImageLoadingService
+import com.sevenlearn.nikestore.services.ImageLoadingService
 import com.sevenlearn.nikestore.services.http.ApiService
 import com.sevenlearn.nikestore.services.http.createApiServiceInstance
 import org.koin.android.ext.koin.androidContext
@@ -17,14 +24,22 @@ import timber.log.Timber
 class App : Application() {
     override fun onCreate() {
         super.onCreate()
-        Timber.plant()
+        Timber.plant(Timber.DebugTree())
+
+        Fresco.initialize(this)
 
         val myModules = module {
             single { createApiServiceInstance() }
-            factory<ProductRepository> { ProductRepositoryImpl(ProductRemoteDataSource(get()),
-                ProductLocalDataSource()
-            )}
-            viewModel { MainViewModel(get()) }
+            single<ImageLoadingService> { FrescoImageLoadingService() }
+            factory<ProductRepository> {
+                ProductRepositoryImpl(
+                    ProductRemoteDataSource(get()),
+                    ProductLocalDataSource()
+                )
+            }
+            factory { ProductListAdapter(get()) }
+            factory<BannerRepository> { BannerRepositoryImpl(BannerRemoteDataSource(get())) }
+            viewModel { MainViewModel(get(), get()) }
         }
 
         startKoin {
