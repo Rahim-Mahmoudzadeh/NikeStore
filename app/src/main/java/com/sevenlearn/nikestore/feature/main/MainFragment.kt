@@ -1,22 +1,24 @@
 package com.sevenlearn.nikestore.feature.main
 
+import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.sevenlearn.nikestore.R
+import com.sevenlearn.nikestore.common.EXTRA_KEY_DATA
 import com.sevenlearn.nikestore.common.NikeFragment
 import com.sevenlearn.nikestore.common.convertDpToPixel
 import com.sevenlearn.nikestore.data.Product
+import com.sevenlearn.nikestore.feature.product.ProductDetailActivity
 import kotlinx.android.synthetic.main.fragment_main.*
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
-class MainFragment : NikeFragment() {
+class MainFragment : NikeFragment(), ProductListAdapter.OnProductClickListener {
     val mainViewModel: MainViewModel by viewModel()
     val productListAdapter: ProductListAdapter by inject()
     override fun onCreateView(
@@ -32,11 +34,11 @@ class MainFragment : NikeFragment() {
         latestProductsRv.layoutManager =
             LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
         latestProductsRv.adapter = productListAdapter
-
+        productListAdapter.onProductClickListener = this
 
         mainViewModel.productsLiveData.observe(viewLifecycleOwner) {
             Timber.i(it.toString())
-            productListAdapter.products= it as ArrayList<Product>
+            productListAdapter.products = it as ArrayList<Product>
         }
 
         mainViewModel.progressBarLiveData.observe(viewLifecycleOwner) {
@@ -60,5 +62,11 @@ class MainFragment : NikeFragment() {
 
         }
 
+    }
+
+    override fun onProductClick(product: Product) {
+        startActivity(Intent(requireContext(), ProductDetailActivity::class.java).apply {
+            putExtra(EXTRA_KEY_DATA, product)
+        })
     }
 }

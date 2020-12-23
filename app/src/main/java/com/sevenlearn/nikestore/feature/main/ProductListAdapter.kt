@@ -12,10 +12,12 @@ import com.sevenlearn.nikestore.common.implementSpringAnimationTrait
 import com.sevenlearn.nikestore.data.Product
 import com.sevenlearn.nikestore.services.ImageLoadingService
 import com.sevenlearn.nikestore.view.NikeImageView
-import kotlinx.android.synthetic.main.item_product.view.*
 
 class ProductListAdapter(val imageLoadingService: ImageLoadingService) :
     RecyclerView.Adapter<ProductListAdapter.ViewHolder>() {
+
+    var onProductClickListener: OnProductClickListener? = null
+
     var products = ArrayList<Product>()
         set(value) {
             field = value
@@ -36,7 +38,7 @@ class ProductListAdapter(val imageLoadingService: ImageLoadingService) :
             previousPriceTv.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
             itemView.implementSpringAnimationTrait()
             itemView.setOnClickListener {
-
+                onProductClickListener?.onProductClick(product)
             }
         }
     }
@@ -51,4 +53,8 @@ class ProductListAdapter(val imageLoadingService: ImageLoadingService) :
         holder.bindProduct(products[position])
 
     override fun getItemCount(): Int = products.size
+
+    interface OnProductClickListener {
+        fun onProductClick(product: Product)
+    }
 }
