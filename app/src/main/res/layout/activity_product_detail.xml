@@ -16,11 +16,15 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <com.sevenlearn.nikestore.view.NikeImageView
-                android:id="@+id/productIv"
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:viewAspectRatio="1" />
+                android:layout_height="wrap_content">
+                <com.sevenlearn.nikestore.view.NikeImageView
+                    android:id="@+id/productIv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:viewAspectRatio="1" />
+            </FrameLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"

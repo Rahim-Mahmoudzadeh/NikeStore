@@ -1,6 +1,5 @@
 package com.sevenlearn.nikestore.feature.product
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -42,10 +41,6 @@ class ProductDetailActivity : NikeActivity() {
             }
         }
 
-        productDetailViewModel.progressBarLiveData.observe(this) {
-
-        }
-
         initViews()
 
     }
@@ -58,6 +53,7 @@ class ProductDetailActivity : NikeActivity() {
         productIv.post {
             val productIvHeight = productIv.height
             val toolbar = toolbarView
+            val productImageView = productIv
             observableScrollView.addScrollViewCallbacks(object : ObservableScrollViewCallbacks {
                 override fun onScrollChanged(
                     scrollY: Int,
@@ -66,6 +62,7 @@ class ProductDetailActivity : NikeActivity() {
                 ) {
                     Timber.i("productIv height is -> $productIvHeight")
                     toolbar.alpha = scrollY.toFloat() / productIvHeight.toFloat()
+                    productImageView.translationY = scrollY.toFloat() / 2
                 }
 
                 override fun onDownMotionEvent() {

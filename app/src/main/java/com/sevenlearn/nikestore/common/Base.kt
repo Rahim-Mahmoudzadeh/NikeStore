@@ -20,7 +20,7 @@ abstract class NikeFragment : Fragment(), NikeView {
 
 abstract class NikeActivity : AppCompatActivity(), NikeView {
     override val rootView: CoordinatorLayout?
-        get() = window.decorView.findViewById(android.R.id.content) as CoordinatorLayout?
+        get() = window.decorView.rootView as CoordinatorLayout?
     override val viewContext: Context?
         get() = this
 }
