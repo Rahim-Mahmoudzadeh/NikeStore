@@ -3,11 +3,9 @@ package com.sevenlearn.nikestore
 import android.app.Application
 import android.os.Bundle
 import com.facebook.drawee.backends.pipeline.Fresco
-import com.sevenlearn.nikestore.data.repo.BannerRepository
-import com.sevenlearn.nikestore.data.repo.BannerRepositoryImpl
-import com.sevenlearn.nikestore.data.repo.ProductRepository
-import com.sevenlearn.nikestore.data.repo.ProductRepositoryImpl
+import com.sevenlearn.nikestore.data.repo.*
 import com.sevenlearn.nikestore.data.repo.source.BannerRemoteDataSource
+import com.sevenlearn.nikestore.data.repo.source.CommentRemoteDataSource
 import com.sevenlearn.nikestore.data.repo.source.ProductLocalDataSource
 import com.sevenlearn.nikestore.data.repo.source.ProductRemoteDataSource
 import com.sevenlearn.nikestore.feature.ProductDetailViewModel
@@ -41,8 +39,9 @@ class App : Application() {
             }
             factory { ProductListAdapter(get()) }
             factory<BannerRepository> { BannerRepositoryImpl(BannerRemoteDataSource(get())) }
+            factory<CommentRepository> { CommentRepositoryImpl(CommentRemoteDataSource(get())) }
             viewModel { MainViewModel(get(), get()) }
-            viewModel { (bundle: Bundle) -> ProductDetailViewModel(bundle) }
+            viewModel { (bundle: Bundle) -> ProductDetailViewModel(bundle, get()) }
         }
 
         startKoin {
