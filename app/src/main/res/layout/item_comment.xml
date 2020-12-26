@@ -4,15 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginStart="8dp"
-    android:layout_marginEnd="8dp"
-    android:background="@drawable/background_comment"
-    android:padding="16dp">
+    >
 
     <TextView
         android:id="@+id/commentTitleTv"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
         android:gravity="right"
         android:textAppearance="?textAppearanceBody1"
         app:layout_constraintEnd_toStartOf="@+id/commentDateTv"
@@ -24,6 +23,8 @@
         android:id="@+id/commentDateTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
         android:textAppearance="?textAppearanceBody2"
         android:textColor="?android:textColorSecondary"
         app:layout_constraintBottom_toBottomOf="@+id/commentTitleTv"
@@ -46,12 +47,21 @@
         android:id="@+id/commentContentTv"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textAppearance="?textAppearanceBody2"
-
         android:layout_marginTop="12dp"
+
         android:gravity="right"
-        tools:text="اقعا یکی از بهترین کفش هاییه که تا حالا دیدم خیلی خوبه"
+        android:textAppearance="?textAppearanceBody2"
         app:layout_constraintEnd_toEndOf="@+id/commentDateTv"
         app:layout_constraintStart_toStartOf="@+id/commentAuthor"
-        app:layout_constraintTop_toBottomOf="@+id/commentAuthor" />
+        app:layout_constraintTop_toBottomOf="@+id/commentAuthor"
+        tools:text="اقعا یکی از بهترین کفش هاییه که تا حالا دیدم خیلی خوبه" />
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="16dp"
+        android:background="?dividerColor"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/commentContentTv" />
 </androidx.constraintlayout.widget.ConstraintLayout>

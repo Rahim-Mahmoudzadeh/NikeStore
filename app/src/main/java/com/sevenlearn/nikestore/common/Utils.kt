@@ -10,6 +10,9 @@ import android.view.View
 import androidx.dynamicanimation.animation.DynamicAnimation
 import androidx.dynamicanimation.animation.SpringAnimation
 import androidx.dynamicanimation.animation.SpringForce
+import io.reactivex.Single
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 
 fun convertDpToPixel(dp: Float, context: Context?): Float {
@@ -27,7 +30,7 @@ fun formatPrice(
     price: Number,
     unitRelativeSizeFactor: Float = 0.7f
 ): SpannableString {
-    val currencyLabel="تومان"
+    val currencyLabel = "تومان"
     val spannableString = SpannableString("$price $currencyLabel")
     spannableString.setSpan(
         RelativeSizeSpan(unitRelativeSizeFactor),
@@ -75,4 +78,10 @@ fun View.implementSpringAnimationTrait() {
 
         false
     }
+}
+
+fun <T> Single<T>.asyncNetworkRequest(): Single<T> {
+    return subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+
 }

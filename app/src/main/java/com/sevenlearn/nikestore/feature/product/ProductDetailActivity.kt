@@ -1,14 +1,18 @@
 package com.sevenlearn.nikestore.feature.product
 
+import android.content.Intent
+import android.graphics.Paint
 import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.sevenlearn.nikestore.R
+import com.sevenlearn.nikestore.common.EXTRA_KEY_ID
 import com.sevenlearn.nikestore.common.NikeActivity
 import com.sevenlearn.nikestore.common.formatPrice
 import com.sevenlearn.nikestore.data.Comment
 import com.sevenlearn.nikestore.feature.ProductDetailViewModel
+import com.sevenlearn.nikestore.feature.product.comment.CommentListActivity
 import com.sevenlearn.nikestore.services.ImageLoadingService
 import com.sevenlearn.nikestore.view.scroll.ObservableScrollViewCallbacks
 import com.sevenlearn.nikestore.view.scroll.ScrollState
@@ -29,8 +33,13 @@ class ProductDetailActivity : NikeActivity() {
             imageLoadingService.load(productIv, it.image)
             titleTv.text = it.title
             previousPriceTv.text = formatPrice(it.previous_price)
+            previousPriceTv.paintFlags=Paint.STRIKE_THRU_TEXT_FLAG
             currentPriceTv.text = formatPrice(it.price)
             toolbarTitleTv.text = it.title
+        }
+
+        productDetailViewModel.progressBarLiveData.observe(this){
+            setProgressIndicator(it)
         }
 
         productDetailViewModel.commentsLiveData.observe(this) {
@@ -38,6 +47,11 @@ class ProductDetailActivity : NikeActivity() {
             commentAdapter.comments = it as ArrayList<Comment>
             if (it.size > 3) {
                 viewAllCommentsBtn.visibility = View.VISIBLE
+                viewAllCommentsBtn.setOnClickListener {
+                    startActivity(Intent(this, CommentListActivity::class.java).apply {
+                        putExtra(EXTRA_KEY_ID, productDetailViewModel.productLiveData.value!!.id)
+                    })
+                }
             }
         }
 

@@ -11,6 +11,7 @@ import com.sevenlearn.nikestore.data.repo.source.ProductRemoteDataSource
 import com.sevenlearn.nikestore.feature.ProductDetailViewModel
 import com.sevenlearn.nikestore.feature.main.MainViewModel
 import com.sevenlearn.nikestore.feature.main.ProductListAdapter
+import com.sevenlearn.nikestore.feature.product.comment.CommentListViewModel
 import com.sevenlearn.nikestore.services.FrescoImageLoadingService
 import com.sevenlearn.nikestore.services.ImageLoadingService
 import com.sevenlearn.nikestore.services.http.ApiService
@@ -42,6 +43,7 @@ class App : Application() {
             factory<CommentRepository> { CommentRepositoryImpl(CommentRemoteDataSource(get())) }
             viewModel { MainViewModel(get(), get()) }
             viewModel { (bundle: Bundle) -> ProductDetailViewModel(bundle, get()) }
+            viewModel { (productId: Int) -> CommentListViewModel(productId, get()) }
         }
 
         startKoin {

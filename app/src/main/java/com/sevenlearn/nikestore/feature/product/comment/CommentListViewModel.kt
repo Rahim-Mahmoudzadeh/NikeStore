@@ -1,26 +1,18 @@
-package com.sevenlearn.nikestore.feature
+package com.sevenlearn.nikestore.feature.product.comment
 
-import android.os.Bundle
 import androidx.lifecycle.MutableLiveData
-import com.sevenlearn.nikestore.common.EXTRA_KEY_DATA
 import com.sevenlearn.nikestore.common.NikeSingleObserver
 import com.sevenlearn.nikestore.common.NikeViewModel
 import com.sevenlearn.nikestore.common.asyncNetworkRequest
 import com.sevenlearn.nikestore.data.Comment
-import com.sevenlearn.nikestore.data.Product
 import com.sevenlearn.nikestore.data.repo.CommentRepository
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 
-class ProductDetailViewModel(bundle: Bundle, commentRepository: CommentRepository) :
-    NikeViewModel() {
-    val productLiveData = MutableLiveData<Product>()
+class CommentListViewModel(productId: Int, commentRepository: CommentRepository) : NikeViewModel() {
     val commentsLiveData = MutableLiveData<List<Comment>>()
 
     init {
-        productLiveData.value = bundle.getParcelable(EXTRA_KEY_DATA)
         progressBarLiveData.value = true
-        commentRepository.getAll(productLiveData.value!!.id)
+        commentRepository.getAll(productId)
             .asyncNetworkRequest()
             .doFinally { progressBarLiveData.value = false }
             .subscribe(object : NikeSingleObserver<List<Comment>>(compositeDisposable) {
