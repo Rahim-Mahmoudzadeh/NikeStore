@@ -9,12 +9,12 @@ import com.sevenlearn.nikestore.data.repo.source.CommentRemoteDataSource
 import com.sevenlearn.nikestore.data.repo.source.ProductLocalDataSource
 import com.sevenlearn.nikestore.data.repo.source.ProductRemoteDataSource
 import com.sevenlearn.nikestore.feature.ProductDetailViewModel
-import com.sevenlearn.nikestore.feature.main.MainViewModel
-import com.sevenlearn.nikestore.feature.main.ProductListAdapter
+import com.sevenlearn.nikestore.feature.common.ProductListAdapter
+import com.sevenlearn.nikestore.feature.list.ProductListViewModel
+import com.sevenlearn.nikestore.feature.home.HomeViewModel
 import com.sevenlearn.nikestore.feature.product.comment.CommentListViewModel
 import com.sevenlearn.nikestore.services.FrescoImageLoadingService
 import com.sevenlearn.nikestore.services.ImageLoadingService
-import com.sevenlearn.nikestore.services.http.ApiService
 import com.sevenlearn.nikestore.services.http.createApiServiceInstance
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.viewmodel.dsl.viewModel
@@ -38,12 +38,13 @@ class App : Application() {
                     ProductLocalDataSource()
                 )
             }
-            factory { ProductListAdapter(get()) }
+            factory { (viewType: Int) -> ProductListAdapter(viewType, get()) }
             factory<BannerRepository> { BannerRepositoryImpl(BannerRemoteDataSource(get())) }
             factory<CommentRepository> { CommentRepositoryImpl(CommentRemoteDataSource(get())) }
-            viewModel { MainViewModel(get(), get()) }
+            viewModel { HomeViewModel(get(), get()) }
             viewModel { (bundle: Bundle) -> ProductDetailViewModel(bundle, get()) }
             viewModel { (productId: Int) -> CommentListViewModel(productId, get()) }
+            viewModel { (sort: Int) -> ProductListViewModel(sort, get()) }
         }
 
         startKoin {

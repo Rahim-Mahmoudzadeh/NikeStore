@@ -79,25 +79,27 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/latest"
                     android:layout_gravity="center_vertical|start"
+                    android:text="@string/latest"
                     android:textAppearance="?textAppearanceHeadline6"
                     android:textColor="?android:textColorSecondary" />
 
                 <com.google.android.material.button.MaterialButton
+                    android:id="@+id/viewLatestProductsBtn"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/viewAll"
-                    style="@style/Widget.MaterialComponents.Button.TextButton"
-                    android:layout_gravity="end|center_vertical"/>
+                    android:layout_gravity="end|center_vertical"
+                    android:text="@string/viewAll" />
             </FrameLayout>
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/latestProductsRv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:clipToPadding="false"
                 android:paddingStart="12dp"
-                android:paddingEnd="12dp"
-                android:clipToPadding="false"/>
+                android:paddingEnd="12dp" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

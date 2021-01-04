@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.sevenlearn.nikestore">
+    package="com.sevenlearn.nikestore" >
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -12,10 +12,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.NikeStore"
-        android:usesCleartextTraffic="true">
-        <activity android:name=".feature.product.comment.CommentListActivity"></activity>
+        android:usesCleartextTraffic="true" >
+        <activity android:name=".feature.list.ProductListActivity" >
+        </activity>
+        <activity android:name=".feature.product.comment.CommentListActivity" />
         <activity android:name=".feature.product.ProductDetailActivity" />
-        <activity android:name=".feature.main.MainActivity">
+        <activity android:name=".feature.main.MainActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

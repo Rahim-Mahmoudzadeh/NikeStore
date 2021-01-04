@@ -1,4 +1,4 @@
-package com.sevenlearn.nikestore.feature.main
+package com.sevenlearn.nikestore.feature.home
 
 import android.content.Intent
 import android.os.Bundle
@@ -12,21 +12,27 @@ import com.sevenlearn.nikestore.common.EXTRA_KEY_DATA
 import com.sevenlearn.nikestore.common.NikeFragment
 import com.sevenlearn.nikestore.common.convertDpToPixel
 import com.sevenlearn.nikestore.data.Product
+import com.sevenlearn.nikestore.data.SORT_LATEST
+import com.sevenlearn.nikestore.feature.common.ProductListAdapter
+import com.sevenlearn.nikestore.feature.common.VIEW_TYPE_ROUND
+import com.sevenlearn.nikestore.feature.list.ProductListActivity
+import com.sevenlearn.nikestore.feature.main.BannerSliderAdapter
 import com.sevenlearn.nikestore.feature.product.ProductDetailActivity
-import kotlinx.android.synthetic.main.fragment_main.*
+import kotlinx.android.synthetic.main.fragment_home.*
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 import timber.log.Timber
 
-class MainFragment : NikeFragment(), ProductListAdapter.OnProductClickListener {
-    val mainViewModel: MainViewModel by viewModel()
-    val productListAdapter: ProductListAdapter by inject()
+class HomeFragment : NikeFragment(), ProductListAdapter.OnProductClickListener {
+    val homeViewModel: HomeViewModel by viewModel()
+    val productListAdapter: ProductListAdapter by inject{ parametersOf(VIEW_TYPE_ROUND)}
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_main, container, false)
+        return inflater.inflate(R.layout.fragment_home, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -36,16 +42,22 @@ class MainFragment : NikeFragment(), ProductListAdapter.OnProductClickListener {
         latestProductsRv.adapter = productListAdapter
         productListAdapter.onProductClickListener = this
 
-        mainViewModel.productsLiveData.observe(viewLifecycleOwner) {
+        homeViewModel.productsLiveData.observe(viewLifecycleOwner) {
             Timber.i(it.toString())
             productListAdapter.products = it as ArrayList<Product>
         }
 
-        mainViewModel.progressBarLiveData.observe(viewLifecycleOwner) {
+        viewLatestProductsBtn.setOnClickListener {
+            startActivity(Intent(requireContext(), ProductListActivity::class.java).apply {
+                putExtra(EXTRA_KEY_DATA, SORT_LATEST)
+            })
+        }
+
+        homeViewModel.progressBarLiveData.observe(viewLifecycleOwner) {
             setProgressIndicator(it)
         }
 
-        mainViewModel.bannersLiveData.observe(viewLifecycleOwner) {
+        homeViewModel.bannersLiveData.observe(viewLifecycleOwner) {
             Timber.i(it.toString())
             val bannerSliderAdapter = BannerSliderAdapter(this, it)
             bannerSliderViewPager.adapter = bannerSliderAdapter
