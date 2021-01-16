@@ -4,11 +4,14 @@ import android.content.Intent
 import android.graphics.Paint
 import android.os.Bundle
 import android.view.View
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import com.sevenlearn.nikestore.R
 import com.sevenlearn.nikestore.common.EXTRA_KEY_ID
 import com.sevenlearn.nikestore.common.NikeActivity
+import com.sevenlearn.nikestore.common.NikeCompletableObserver
 import com.sevenlearn.nikestore.common.formatPrice
 import com.sevenlearn.nikestore.data.Comment
 import com.sevenlearn.nikestore.feature.ProductDetailViewModel
@@ -16,6 +19,10 @@ import com.sevenlearn.nikestore.feature.product.comment.CommentListActivity
 import com.sevenlearn.nikestore.services.ImageLoadingService
 import com.sevenlearn.nikestore.view.scroll.ObservableScrollViewCallbacks
 import com.sevenlearn.nikestore.view.scroll.ScrollState
+import io.reactivex.CompletableObserver
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_product_detail.*
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
@@ -26,6 +33,7 @@ class ProductDetailActivity : NikeActivity() {
     val productDetailViewModel: ProductDetailViewModel by viewModel { parametersOf(intent.extras) }
     val imageLoadingService: ImageLoadingService by inject()
     val commentAdapter = CommentAdapter()
+    val compositeDisposable = CompositeDisposable()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_product_detail)
@@ -33,12 +41,12 @@ class ProductDetailActivity : NikeActivity() {
             imageLoadingService.load(productIv, it.image)
             titleTv.text = it.title
             previousPriceTv.text = formatPrice(it.previous_price)
-            previousPriceTv.paintFlags=Paint.STRIKE_THRU_TEXT_FLAG
+            previousPriceTv.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
             currentPriceTv.text = formatPrice(it.price)
             toolbarTitleTv.text = it.title
         }
 
-        productDetailViewModel.progressBarLiveData.observe(this){
+        productDetailViewModel.progressBarLiveData.observe(this) {
             setProgressIndicator(it)
         }
 
@@ -88,5 +96,21 @@ class ProductDetailActivity : NikeActivity() {
             })
         }
 
+        addToCartBtn.setOnClickListener {
+            productDetailViewModel.onAddToCartBtn()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(object : NikeCompletableObserver(compositeDisposable) {
+                    override fun onComplete() {
+                        showSnackBar(getString(R.string.success_addToCart))
+                    }
+                })
+        }
+
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        compositeDisposable.clear()
     }
 }

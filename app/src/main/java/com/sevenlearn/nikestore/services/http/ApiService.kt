@@ -1,5 +1,7 @@
 package com.sevenlearn.nikestore.services.http
 
+import com.google.gson.JsonObject
+import com.sevenlearn.nikestore.data.AddToCartResponse
 import com.sevenlearn.nikestore.data.Banner
 import com.sevenlearn.nikestore.data.Comment
 import com.sevenlearn.nikestore.data.Product
@@ -7,7 +9,9 @@ import io.reactivex.Single
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.Query
 
 interface ApiService {
@@ -20,6 +24,9 @@ interface ApiService {
 
     @GET("comment/list")
     fun getComments(@Query("product_id") productId: Int): Single<List<Comment>>
+
+    @POST("cart/add")
+    fun addToCart(@Body jsonObject: JsonObject):Single<AddToCartResponse>
 }
 
 fun createApiServiceInstance(): ApiService {
