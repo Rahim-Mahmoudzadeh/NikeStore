@@ -8,6 +8,7 @@ import com.sevenlearn.nikestore.data.repo.*
 import com.sevenlearn.nikestore.data.repo.source.*
 import com.sevenlearn.nikestore.feature.ProductDetailViewModel
 import com.sevenlearn.nikestore.feature.auth.AuthViewModel
+import com.sevenlearn.nikestore.feature.cart.CartViewModel
 import com.sevenlearn.nikestore.feature.common.ProductListAdapter
 import com.sevenlearn.nikestore.feature.list.ProductListViewModel
 import com.sevenlearn.nikestore.feature.home.HomeViewModel
@@ -61,7 +62,7 @@ class App : Application() {
             viewModel { (productId: Int) -> CommentListViewModel(productId, get()) }
             viewModel { (sort: Int) -> ProductListViewModel(sort, get()) }
             viewModel { AuthViewModel(get()) }
-
+            viewModel { CartViewModel(get()) }
         }
 
         startKoin {
