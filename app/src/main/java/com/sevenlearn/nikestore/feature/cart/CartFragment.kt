@@ -12,12 +12,15 @@ import com.sevenlearn.nikestore.common.EXTRA_KEY_DATA
 import com.sevenlearn.nikestore.common.NikeCompletableObserver
 import com.sevenlearn.nikestore.common.NikeFragment
 import com.sevenlearn.nikestore.data.CartItem
+import com.sevenlearn.nikestore.feature.auth.AuthActivity
 import com.sevenlearn.nikestore.feature.product.ProductDetailActivity
 import com.sevenlearn.nikestore.services.ImageLoadingService
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_cart.*
+import kotlinx.android.synthetic.main.view_cart_empty_state.*
+import kotlinx.android.synthetic.main.view_cart_empty_state.view.*
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 import timber.log.Timber
@@ -56,6 +59,22 @@ class CartFragment : NikeFragment(), CartItemAdapter.CartItemViewCallbacks {
                 adapter.purchaseDetail = it
                 adapter.notifyItemChanged(adapter.cartItems.size)
             }
+        }
+
+        viewModel.emptyStateLiveData.observe(viewLifecycleOwner) {
+            if (it.mustShow) {
+                val emptyState = showEmptyState(R.layout.view_cart_empty_state)
+
+                emptyState?.let { view ->
+                    view.emptyStateMessageTv.text = getString(it.messageResId)
+                    view.emptyStateCtaBtn.visibility =
+                        if (it.mustShowCallToActionButton) View.VISIBLE else View.GONE
+                    view.emptyStateCtaBtn.setOnClickListener {
+                        startActivity(Intent(requireContext(), AuthActivity::class.java))
+                    }
+                }
+            } else
+                emptyStateRootView?.visibility = View.GONE
         }
     }
 
