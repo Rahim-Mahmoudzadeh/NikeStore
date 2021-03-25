@@ -8,6 +8,7 @@ import com.sevenlearn.nikestore.common.asyncNetworkRequest
 import com.sevenlearn.nikestore.data.*
 import com.sevenlearn.nikestore.data.repo.CartRepository
 import io.reactivex.Completable
+import org.greenrobot.eventbus.EventBus
 import timber.log.Timber
 
 class CartViewModel(val cartRepository: CartRepository) : NikeViewModel() {
@@ -40,6 +41,13 @@ class CartViewModel(val cartRepository: CartRepository) : NikeViewModel() {
             .doAfterSuccess {
                 Timber.i("Cart Items Count after remove-> ${cartItemsLiveData.value?.size}")
                 calculateAndPublishPurchaseDetail()
+
+                val cartItemCount = EventBus.getDefault().getStickyEvent(CartItemCount::class.java)
+                cartItemCount?.let {
+                    it.count -= cartItem.count
+                    EventBus.getDefault().postSticky(it)
+                }
+
                 cartItemsLiveData.value?.let {
                     if (it.isEmpty()) {
                         emptyStateLiveData.postValue(EmptyState(true, R.string.cartEmptyState))
@@ -53,6 +61,11 @@ class CartViewModel(val cartRepository: CartRepository) : NikeViewModel() {
         cartRepository.changeCount(cartItem.cart_item_id, ++cartItem.count)
             .doAfterSuccess {
                 calculateAndPublishPurchaseDetail()
+                val cartItemCount = EventBus.getDefault().getStickyEvent(CartItemCount::class.java)
+                cartItemCount?.let {
+                    it.count += 1
+                    EventBus.getDefault().postSticky(it)
+                }
             }
             .ignoreElement()
 
@@ -60,6 +73,11 @@ class CartViewModel(val cartRepository: CartRepository) : NikeViewModel() {
         cartRepository.changeCount(cartItem.cart_item_id, --cartItem.count)
             .doAfterSuccess {
                 calculateAndPublishPurchaseDetail()
+                val cartItemCount = EventBus.getDefault().getStickyEvent(CartItemCount::class.java)
+                cartItemCount?.let {
+                    it.count -= 1
+                    EventBus.getDefault().postSticky(it)
+                }
             }
             .ignoreElement()
 

@@ -5,14 +5,22 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.ui.setupActionBarWithNavController
+import com.google.android.material.badge.BadgeDrawable
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.color.MaterialColors
 import com.sevenlearn.nikestore.R
 import com.sevenlearn.nikestore.common.NikeActivity
+import com.sevenlearn.nikestore.common.convertDpToPixel
 import com.sevenlearn.nikestore.common.setupWithNavController
+import com.sevenlearn.nikestore.data.CartItemCount
+import kotlinx.android.synthetic.main.activity_main.*
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
+import org.koin.android.viewmodel.ext.android.viewModel
 
 class MainActivity : NikeActivity() {
     private var currentNavController: LiveData<NavController>? = null
-
+    private val viewModel: MainViewModel by viewModel()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -50,5 +58,20 @@ class MainActivity : NikeActivity() {
 
     override fun onSupportNavigateUp(): Boolean {
         return currentNavController?.value?.navigateUp() ?: false
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onCartItemsCountChangeEvent(cartItemCount: CartItemCount) {
+        val badge = bottomNavigationMain.getOrCreateBadge(R.id.cart)
+        badge.badgeGravity = BadgeDrawable.BOTTOM_START
+        badge.backgroundColor = MaterialColors.getColor(bottomNavigationMain, R.attr.colorPrimary)
+        badge.number = cartItemCount.count
+        badge.verticalOffset= convertDpToPixel(10f,this).toInt()
+        badge.isVisible = cartItemCount.count > 0
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.getCartItemsCount()
     }
 }

@@ -12,6 +12,7 @@ import com.sevenlearn.nikestore.feature.cart.CartViewModel
 import com.sevenlearn.nikestore.feature.common.ProductListAdapter
 import com.sevenlearn.nikestore.feature.list.ProductListViewModel
 import com.sevenlearn.nikestore.feature.home.HomeViewModel
+import com.sevenlearn.nikestore.feature.main.MainViewModel
 import com.sevenlearn.nikestore.feature.product.comment.CommentListViewModel
 import com.sevenlearn.nikestore.services.FrescoImageLoadingService
 import com.sevenlearn.nikestore.services.ImageLoadingService
@@ -63,6 +64,7 @@ class App : Application() {
             viewModel { (sort: Int) -> ProductListViewModel(sort, get()) }
             viewModel { AuthViewModel(get()) }
             viewModel { CartViewModel(get()) }
+            viewModel { MainViewModel(get()) }
         }
 
         startKoin {
