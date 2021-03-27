@@ -5,15 +5,20 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import com.facebook.drawee.backends.pipeline.Fresco
 import com.sevenlearn.nikestore.data.repo.*
+import com.sevenlearn.nikestore.data.repo.order.OrderRemoteDataSource
+import com.sevenlearn.nikestore.data.repo.order.OrderRepository
+import com.sevenlearn.nikestore.data.repo.order.OrderRepositoryImpl
 import com.sevenlearn.nikestore.data.repo.source.*
 import com.sevenlearn.nikestore.feature.ProductDetailViewModel
 import com.sevenlearn.nikestore.feature.auth.AuthViewModel
 import com.sevenlearn.nikestore.feature.cart.CartViewModel
+import com.sevenlearn.nikestore.feature.checkout.CheckoutViewModel
 import com.sevenlearn.nikestore.feature.common.ProductListAdapter
 import com.sevenlearn.nikestore.feature.list.ProductListViewModel
 import com.sevenlearn.nikestore.feature.home.HomeViewModel
 import com.sevenlearn.nikestore.feature.main.MainViewModel
 import com.sevenlearn.nikestore.feature.product.comment.CommentListViewModel
+import com.sevenlearn.nikestore.feature.shipping.ShippingViewModel
 import com.sevenlearn.nikestore.services.FrescoImageLoadingService
 import com.sevenlearn.nikestore.services.ImageLoadingService
 import com.sevenlearn.nikestore.services.http.createApiServiceInstance
@@ -54,6 +59,8 @@ class App : Application() {
                     UserRemoteDataSource(get())
                 )
             }
+            single<OrderRepository> { OrderRepositoryImpl(OrderRemoteDataSource(get())) }
+
             factory { (viewType: Int) -> ProductListAdapter(viewType, get()) }
             factory<BannerRepository> { BannerRepositoryImpl(BannerRemoteDataSource(get())) }
             factory<CommentRepository> { CommentRepositoryImpl(CommentRemoteDataSource(get())) }
@@ -65,6 +72,8 @@ class App : Application() {
             viewModel { AuthViewModel(get()) }
             viewModel { CartViewModel(get()) }
             viewModel { MainViewModel(get()) }
+            viewModel { ShippingViewModel(get()) }
+            viewModel { (orderId: Int) -> CheckoutViewModel(orderId, get()) }
         }
 
         startKoin {

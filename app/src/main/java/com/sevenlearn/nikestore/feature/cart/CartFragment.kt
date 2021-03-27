@@ -15,6 +15,7 @@ import com.sevenlearn.nikestore.common.NikeFragment
 import com.sevenlearn.nikestore.data.CartItem
 import com.sevenlearn.nikestore.feature.auth.AuthActivity
 import com.sevenlearn.nikestore.feature.product.ProductDetailActivity
+import com.sevenlearn.nikestore.feature.shipping.ShippingActivity
 import com.sevenlearn.nikestore.services.ImageLoadingService
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -76,6 +77,12 @@ class CartFragment : NikeFragment(), CartItemAdapter.CartItemViewCallbacks {
                 }
             } else
                 emptyStateRootView?.visibility = View.GONE
+        }
+
+        payBtn.setOnClickListener {
+            startActivity(Intent(requireContext(), ShippingActivity::class.java).apply {
+                putExtra(EXTRA_KEY_DATA, viewModel.purchaseDetailLiveData.value)
+            })
         }
     }
 

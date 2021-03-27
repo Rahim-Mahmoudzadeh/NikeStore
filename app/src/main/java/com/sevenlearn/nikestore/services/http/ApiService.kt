@@ -48,6 +48,12 @@ interface ApiService {
 
     @POST("auth/token")
     fun refreshToken(@Body jsonObject: JsonObject): Call<TokenResponse>
+
+    @POST("order/submit")
+    fun submitOrder(@Body jsonObject: JsonObject): Single<SubmitOrderResult>
+
+    @GET("order/checkout")
+    fun checkout(@Query("order_id") orderId: Int): Single<Checkout>
 }
 
 fun createApiServiceInstance(): ApiService {
