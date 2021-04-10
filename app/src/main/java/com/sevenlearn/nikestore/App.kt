@@ -18,6 +18,7 @@ import com.sevenlearn.nikestore.feature.list.ProductListViewModel
 import com.sevenlearn.nikestore.feature.home.HomeViewModel
 import com.sevenlearn.nikestore.feature.main.MainViewModel
 import com.sevenlearn.nikestore.feature.product.comment.CommentListViewModel
+import com.sevenlearn.nikestore.feature.profile.ProfileViewModel
 import com.sevenlearn.nikestore.feature.shipping.ShippingViewModel
 import com.sevenlearn.nikestore.services.FrescoImageLoadingService
 import com.sevenlearn.nikestore.services.ImageLoadingService
@@ -74,6 +75,7 @@ class App : Application() {
             viewModel { MainViewModel(get()) }
             viewModel { ShippingViewModel(get()) }
             viewModel { (orderId: Int) -> CheckoutViewModel(orderId, get()) }
+            viewModel { ProfileViewModel(get()) }
         }
 
         startKoin {

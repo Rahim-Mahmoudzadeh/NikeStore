@@ -145,7 +145,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="end|center_vertical"
             android:layout_marginEnd="16dp"
-            app:srcCompat="@drawable/ic_favorites_24dp" />
+            app:srcCompat="@drawable/ic_favorites_20dp" />
     </FrameLayout>
 
     <com.google.android.material.card.MaterialCardView
