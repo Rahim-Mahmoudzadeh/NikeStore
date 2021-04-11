@@ -1,10 +1,8 @@
 package com.sevenlearn.nikestore.feature.list
 
-import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.sevenlearn.nikestore.R
@@ -21,7 +19,7 @@ import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import timber.log.Timber
 
-class ProductListActivity : NikeActivity(),ProductListAdapter.OnProductClickListener {
+class ProductListActivity : NikeActivity(),ProductListAdapter.ProductEventListener {
     val viewModel: ProductListViewModel by viewModel {
         parametersOf(
             intent.extras!!.getInt(
@@ -38,7 +36,7 @@ class ProductListActivity : NikeActivity(),ProductListAdapter.OnProductClickList
         val gridLayoutManager = GridLayoutManager(this, 2)
         productsRv.layoutManager = gridLayoutManager
         productsRv.adapter = productListAdapter
-        productListAdapter.onProductClickListener=this
+        productListAdapter.productEventListener=this
         viewTypeChangerBtn.setOnClickListener {
             if (productListAdapter.viewType == VIEW_TYPE_SMALL) {
                 viewTypeChangerBtn.setImageResource(R.drawable.ic_view_type_large)
@@ -87,5 +85,9 @@ class ProductListActivity : NikeActivity(),ProductListAdapter.OnProductClickList
         startActivity(Intent(this,ProductDetailActivity::class.java).apply {
             putExtra(EXTRA_KEY_DATA,product)
         })
+    }
+
+    override fun onFavoriteBtnClick(product: Product) {
+
     }
 }

@@ -24,9 +24,9 @@ import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import timber.log.Timber
 
-class HomeFragment : NikeFragment(), ProductListAdapter.OnProductClickListener {
+class HomeFragment : NikeFragment(), ProductListAdapter.ProductEventListener {
     val homeViewModel: HomeViewModel by viewModel()
-    val productListAdapter: ProductListAdapter by inject{ parametersOf(VIEW_TYPE_ROUND)}
+    val productListAdapter: ProductListAdapter by inject { parametersOf(VIEW_TYPE_ROUND) }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -40,7 +40,7 @@ class HomeFragment : NikeFragment(), ProductListAdapter.OnProductClickListener {
         latestProductsRv.layoutManager =
             LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
         latestProductsRv.adapter = productListAdapter
-        productListAdapter.onProductClickListener = this
+        productListAdapter.productEventListener = this
 
         homeViewModel.productsLiveData.observe(viewLifecycleOwner) {
             Timber.i(it.toString())
@@ -80,5 +80,9 @@ class HomeFragment : NikeFragment(), ProductListAdapter.OnProductClickListener {
         startActivity(Intent(requireContext(), ProductDetailActivity::class.java).apply {
             putExtra(EXTRA_KEY_DATA, product)
         })
+    }
+
+    override fun onFavoriteBtnClick(product: Product) {
+        homeViewModel.addProductToFavorites(product)
     }
 }

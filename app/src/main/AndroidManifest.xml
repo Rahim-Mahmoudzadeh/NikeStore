@@ -13,15 +13,18 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.NikeStore"
         android:usesCleartextTraffic="true">
+        <activity android:name=".feature.favorites.FavoriteProductsActivity"></activity>
         <activity android:name=".feature.checkout.CheckOutActivity">
             <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
                 <data
                     android:host="expertdevelopers.ir"
                     android:pathPattern="/appCheckout"
-                    android:scheme="nike"/>
+                    android:scheme="nike" />
             </intent-filter>
         </activity>
         <activity android:name=".feature.shipping.ShippingActivity" />
@@ -31,7 +34,8 @@
         <activity android:name=".feature.list.ProductListActivity" />
         <activity android:name=".feature.product.comment.CommentListActivity" />
         <activity android:name=".feature.product.ProductDetailActivity" />
-        <activity android:name=".feature.main.MainActivity"
+        <activity
+            android:name=".feature.main.MainActivity"
             android:windowSoftInputMode="stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

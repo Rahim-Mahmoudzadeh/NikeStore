@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import com.sevenlearn.nikestore.R
 import com.sevenlearn.nikestore.common.NikeFragment
 import com.sevenlearn.nikestore.feature.auth.AuthActivity
+import com.sevenlearn.nikestore.feature.favorites.FavoriteProductsActivity
 import kotlinx.android.synthetic.main.fragment_profile.*
 import org.koin.android.ext.android.inject
 
@@ -19,6 +20,13 @@ class ProfileFragment : NikeFragment() {
         savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_profile, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        favoriteProductsBtn.setOnClickListener {
+            startActivity(Intent(requireContext(), FavoriteProductsActivity::class.java))
+        }
     }
 
     override fun onResume() {
@@ -40,8 +48,8 @@ class ProfileFragment : NikeFragment() {
             authBtn.setOnClickListener {
                 startActivity(Intent(requireContext(), AuthActivity::class.java))
             }
-            authBtn.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.ic_sign_in,0)
-            usernameTv.text=getString(R.string.guest_user)
+            authBtn.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_sign_in, 0)
+            usernameTv.text = getString(R.string.guest_user)
         }
     }
 }

@@ -3,7 +3,9 @@ package com.sevenlearn.nikestore
 import android.app.Application
 import android.content.SharedPreferences
 import android.os.Bundle
+import androidx.room.Room
 import com.facebook.drawee.backends.pipeline.Fresco
+import com.sevenlearn.nikestore.data.db.AppDatabase
 import com.sevenlearn.nikestore.data.repo.*
 import com.sevenlearn.nikestore.data.repo.order.OrderRemoteDataSource
 import com.sevenlearn.nikestore.data.repo.order.OrderRepository
@@ -14,6 +16,7 @@ import com.sevenlearn.nikestore.feature.auth.AuthViewModel
 import com.sevenlearn.nikestore.feature.cart.CartViewModel
 import com.sevenlearn.nikestore.feature.checkout.CheckoutViewModel
 import com.sevenlearn.nikestore.feature.common.ProductListAdapter
+import com.sevenlearn.nikestore.feature.favorites.FavoriteProductsViewModel
 import com.sevenlearn.nikestore.feature.list.ProductListViewModel
 import com.sevenlearn.nikestore.feature.home.HomeViewModel
 import com.sevenlearn.nikestore.feature.main.MainViewModel
@@ -40,10 +43,11 @@ class App : Application() {
         val myModules = module {
             single { createApiServiceInstance() }
             single<ImageLoadingService> { FrescoImageLoadingService() }
+            single { Room.databaseBuilder(this@App,AppDatabase::class.java,"db_app").build() }
             factory<ProductRepository> {
                 ProductRepositoryImpl(
                     ProductRemoteDataSource(get()),
-                    ProductLocalDataSource()
+                    get<AppDatabase>().productDao()
                 )
             }
 
@@ -76,6 +80,7 @@ class App : Application() {
             viewModel { ShippingViewModel(get()) }
             viewModel { (orderId: Int) -> CheckoutViewModel(orderId, get()) }
             viewModel { ProfileViewModel(get()) }
+            viewModel { FavoriteProductsViewModel(get()) }
         }
 
         startKoin {

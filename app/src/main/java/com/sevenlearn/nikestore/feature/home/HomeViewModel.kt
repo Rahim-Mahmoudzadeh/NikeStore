@@ -1,6 +1,7 @@
 package com.sevenlearn.nikestore.feature.home
 
 import androidx.lifecycle.MutableLiveData
+import com.sevenlearn.nikestore.common.NikeCompletableObserver
 import com.sevenlearn.nikestore.common.NikeSingleObserver
 import com.sevenlearn.nikestore.common.NikeViewModel
 import com.sevenlearn.nikestore.data.Banner
@@ -14,7 +15,10 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 
-class HomeViewModel(productRepository: ProductRepository, bannerRepository: BannerRepository) :
+class HomeViewModel(
+    private val productRepository: ProductRepository,
+    bannerRepository: BannerRepository
+) :
     NikeViewModel() {
     val productsLiveData = MutableLiveData<List<Product>>()
     val bannersLiveData = MutableLiveData<List<Banner>>()
@@ -36,8 +40,27 @@ class HomeViewModel(productRepository: ProductRepository, bannerRepository: Bann
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(object : NikeSingleObserver<List<Banner>>(compositeDisposable) {
                 override fun onSuccess(t: List<Banner>) {
-                    bannersLiveData.value=t
+                    bannersLiveData.value = t
                 }
             })
+    }
+
+    fun addProductToFavorites(product: Product) {
+        if (product.isFavorite)
+            productRepository.deleteFromFavorites(product)
+                .subscribeOn(Schedulers.io())
+                .subscribe(object : NikeCompletableObserver(compositeDisposable) {
+                    override fun onComplete() {
+                        product.isFavorite = false
+                    }
+                })
+        else
+            productRepository.addToFavorites(product)
+                .subscribeOn(Schedulers.io())
+                .subscribe(object : NikeCompletableObserver(compositeDisposable) {
+                    override fun onComplete() {
+                        product.isFavorite = true
+                    }
+                })
     }
 }
