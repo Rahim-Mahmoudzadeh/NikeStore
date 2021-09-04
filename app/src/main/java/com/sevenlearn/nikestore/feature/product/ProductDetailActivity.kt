@@ -4,9 +4,12 @@ import android.content.Intent
 import android.graphics.Paint
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
+import android.widget.TextView
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.button.MaterialButton
 import com.google.android.material.snackbar.Snackbar
 import com.sevenlearn.nikestore.R
 import com.sevenlearn.nikestore.common.EXTRA_KEY_ID
@@ -17,13 +20,15 @@ import com.sevenlearn.nikestore.data.Comment
 import com.sevenlearn.nikestore.feature.ProductDetailViewModel
 import com.sevenlearn.nikestore.feature.product.comment.CommentListActivity
 import com.sevenlearn.nikestore.services.ImageLoadingService
+import com.sevenlearn.nikestore.view.NikeImageView
+import com.sevenlearn.nikestore.view.NikeToolbar
+import com.sevenlearn.nikestore.view.scroll.ObservableScrollView
 import com.sevenlearn.nikestore.view.scroll.ObservableScrollViewCallbacks
 import com.sevenlearn.nikestore.view.scroll.ScrollState
 import io.reactivex.CompletableObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.activity_product_detail.*
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -34,11 +39,20 @@ class ProductDetailActivity : NikeActivity() {
     val imageLoadingService: ImageLoadingService by inject()
     val commentAdapter = CommentAdapter()
     val compositeDisposable = CompositeDisposable()
+    var commentsRv:RecyclerView?=null
+    var productIv:NikeImageView?=null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_product_detail)
+         productIv=findViewById(R.id.productIv)
+        val titleTv=findViewById<TextView>(R.id.titleTv)
+        commentsRv=findViewById(R.id.commentsRv)
+        val previousPriceTv=findViewById<TextView>(R.id.previousPriceTv)
+        val currentPriceTv=findViewById<TextView>(R.id.currentPriceTv)
+        val toolbarTitleTv=findViewById<TextView>(R.id.toolbarTitleTv)
+        val viewAllCommentsBtn=findViewById<MaterialButton>(R.id.viewAllCommentsBtn)
         productDetailViewModel.productLiveData.observe(this) {
-            imageLoadingService.load(productIv, it.image)
+            imageLoadingService.load(productIv!!, it.image)
             titleTv.text = it.title
             previousPriceTv.text = formatPrice(it.previous_price)
             previousPriceTv.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
@@ -68,12 +82,14 @@ class ProductDetailActivity : NikeActivity() {
     }
 
     fun initViews() {
-        commentsRv.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
-        commentsRv.adapter = commentAdapter
-        commentsRv.isNestedScrollingEnabled = false
-
-        productIv.post {
-            val productIvHeight = productIv.height
+        commentsRv?.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
+        commentsRv?.adapter = commentAdapter
+        commentsRv?.isNestedScrollingEnabled = false
+        val observableScrollView=findViewById<ObservableScrollView>(R.id.observableScrollView)
+        val addToCartBtn=findViewById<Button>(R.id.addToCartBtn)
+        productIv?.post {
+            val toolbarView=findViewById<NikeToolbar>(R.id.toolbarView)
+            val productIvHeight = productIv?.height
             val toolbar = toolbarView
             val productImageView = productIv
             observableScrollView.addScrollViewCallbacks(object : ObservableScrollViewCallbacks {
@@ -83,8 +99,8 @@ class ProductDetailActivity : NikeActivity() {
                     dragging: Boolean
                 ) {
                     Timber.i("productIv height is -> $productIvHeight")
-                    toolbar.alpha = scrollY.toFloat() / productIvHeight.toFloat()
-                    productImageView.translationY = scrollY.toFloat() / 2
+                    toolbar.alpha = scrollY.toFloat() / productIvHeight!!.toFloat()
+                    productImageView?.translationY = scrollY.toFloat() / 2
                 }
 
                 override fun onDownMotionEvent() {

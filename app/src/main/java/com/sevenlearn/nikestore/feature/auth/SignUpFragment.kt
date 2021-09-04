@@ -4,18 +4,24 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.EditText
 import androidx.fragment.app.Fragment
+import com.google.android.material.button.MaterialButton
 import com.sevenlearn.nikestore.R
 import com.sevenlearn.nikestore.common.NikeCompletableObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.fragment_sign_up.*
 import org.koin.android.ext.android.inject
 
 class SignUpFragment : Fragment() {
     val compositeDisposable = CompositeDisposable()
     val viewModel: AuthViewModel by inject()
+    var loginLinkBtn: MaterialButton? = null
+    var signUpBtn: MaterialButton? = null
+    var emailEt: EditText? = null
+    var passwordEt: EditText? = null
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -26,8 +32,12 @@ class SignUpFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        signUpBtn.setOnClickListener {
-            viewModel.signUp(emailEt.text.toString(), passwordEt.text.toString())
+        loginLinkBtn=view.findViewById(R.id.loginLinkBtn)
+        emailEt=view.findViewById(R.id.emailEt)
+        passwordEt=view.findViewById(R.id.passwordEt)
+        signUpBtn=view.findViewById(R.id.signUpBtn)
+        signUpBtn?.setOnClickListener {
+            viewModel.signUp(emailEt?.text.toString(), passwordEt?.text.toString())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(object : NikeCompletableObserver(compositeDisposable) {
@@ -37,7 +47,7 @@ class SignUpFragment : Fragment() {
                 })
         }
 
-        loginLinkBtn.setOnClickListener {
+        loginLinkBtn?.setOnClickListener {
             requireActivity().supportFragmentManager.beginTransaction().apply {
                 replace(R.id.fragmentContainer, LoginFragment())
             }.commit()

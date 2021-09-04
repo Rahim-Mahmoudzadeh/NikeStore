@@ -3,7 +3,12 @@ package com.sevenlearn.nikestore.feature.list
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
+import android.widget.FrameLayout
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.sevenlearn.nikestore.R
 import com.sevenlearn.nikestore.common.EXTRA_KEY_DATA
@@ -13,7 +18,7 @@ import com.sevenlearn.nikestore.feature.common.ProductListAdapter
 import com.sevenlearn.nikestore.feature.common.VIEW_TYPE_LARGE
 import com.sevenlearn.nikestore.feature.common.VIEW_TYPE_SMALL
 import com.sevenlearn.nikestore.feature.product.ProductDetailActivity
-import kotlinx.android.synthetic.main.activity_product_list.*
+import com.sevenlearn.nikestore.view.NikeToolbar
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -32,7 +37,11 @@ class ProductListActivity : NikeActivity(),ProductListAdapter.ProductEventListen
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_product_list)
-
+        val productsRv=findViewById<RecyclerView>(R.id.productsRv)
+        val viewTypeChangerBtn=findViewById<ImageView>(R.id.viewTypeChangerBtn)
+        val selectedSortTitleTv=findViewById<TextView>(R.id.selectedSortTitleTv)
+        val toolbarView=findViewById<NikeToolbar>(R.id.toolbarView)
+        val sortBtn=findViewById<View>(R.id.sortBtn)
         val gridLayoutManager = GridLayoutManager(this, 2)
         productsRv.layoutManager = gridLayoutManager
         productsRv.adapter = productListAdapter

@@ -3,15 +3,17 @@ package com.sevenlearn.nikestore.feature.cart
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.sevenlearn.nikestore.R
 import com.sevenlearn.nikestore.common.formatPrice
 import com.sevenlearn.nikestore.data.CartItem
 import com.sevenlearn.nikestore.data.PurchaseDetail
 import com.sevenlearn.nikestore.services.ImageLoadingService
+import com.sevenlearn.nikestore.view.NikeImageView
 import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.item_cart.view.*
-import kotlinx.android.synthetic.main.item_purchase_details.view.*
 
 const val VIEW_TYPE_CART_ITEM = 0
 const val VIEW_TYPE_PURCHASE_DETAILS = 1
@@ -27,39 +29,49 @@ class CartItemAdapter(
 
     inner class CartItemViewHolder(override val containerView: View) :
         RecyclerView.ViewHolder(containerView), LayoutContainer {
+        val productTitleTv=containerView.findViewById<TextView>(R.id.productTitleTv)
+        val previousPriceTv=containerView.findViewById<TextView>(R.id.previousPriceTv)
+        val priceTv=containerView.findViewById<TextView>(R.id.priceTv)
+        val cartItemCountTv=containerView.findViewById<TextView>(R.id.cartItemCountTv)
+        val productIv=containerView.findViewById<NikeImageView>(R.id.productIv)
+        val increaseBtn=containerView.findViewById<ImageView>(R.id.increaseBtn)
+        val decreaseBtn=containerView.findViewById<ImageView>(R.id.decreaseBtn)
+        val removeFromCartBtn=containerView.findViewById<TextView>(R.id.removeFromCartBtn)
+        val changeCountProgressBar=containerView.findViewById<ProgressBar>(R.id.changeCountProgressBar)
         fun bindCartItem(cartItem: CartItem) {
-            containerView.productTitleTv.text = cartItem.product.title
-            containerView.cartItemCountTv.text = cartItem.count.toString()
-            containerView.previousPriceTv.text =
+
+            productTitleTv.text = cartItem.product.title
+            cartItemCountTv.text = cartItem.count.toString()
+            previousPriceTv.text =
                 formatPrice(cartItem.product.price + cartItem.product.discount)
-            containerView.priceTv.text = formatPrice(cartItem.product.price)
-            imageLoadingService.load(containerView.productIv, cartItem.product.image)
-            containerView.removeFromCartBtn.setOnClickListener {
+            priceTv.text = formatPrice(cartItem.product.price)
+            imageLoadingService.load(productIv, cartItem.product.image)
+           removeFromCartBtn.setOnClickListener {
                 cartItemViewCallbacks.onRemoveCartItemButtonClick(cartItem)
             }
 
-            containerView.changeCountProgressBar.visibility =
+          changeCountProgressBar.visibility =
                 if (cartItem.changeCountProgressBarIsVisible) View.VISIBLE else View.GONE
 
-            containerView.cartItemCountTv.visibility=if (cartItem.changeCountProgressBarIsVisible) View.INVISIBLE else View.VISIBLE
+            cartItemCountTv.visibility=if (cartItem.changeCountProgressBarIsVisible) View.INVISIBLE else View.VISIBLE
 
-            containerView.increaseBtn.setOnClickListener {
+            increaseBtn.setOnClickListener {
                 cartItem.changeCountProgressBarIsVisible = true
-                containerView.changeCountProgressBar.visibility = View.VISIBLE
-                containerView.cartItemCountTv.visibility = View.INVISIBLE
+                changeCountProgressBar.visibility = View.VISIBLE
+                cartItemCountTv.visibility = View.INVISIBLE
                 cartItemViewCallbacks.onIncreaseCartItemButtonClick(cartItem)
             }
 
-            containerView.decreaseBtn.setOnClickListener {
+            decreaseBtn.setOnClickListener {
                 if (cartItem.count > 1) {
                     cartItem.changeCountProgressBarIsVisible = true
-                    containerView.changeCountProgressBar.visibility = View.VISIBLE
-                    containerView.cartItemCountTv.visibility = View.INVISIBLE
+                    changeCountProgressBar.visibility = View.VISIBLE
+                    cartItemCountTv.visibility = View.INVISIBLE
                     cartItemViewCallbacks.onDecreaseCartItemButtonClick(cartItem)
                 }
             }
 
-            containerView.productIv.setOnClickListener {
+            productIv.setOnClickListener {
                 cartItemViewCallbacks.onProductImageClick(cartItem)
             }
 
@@ -68,10 +80,13 @@ class CartItemAdapter(
 
     class PurchaseDetailViewHolder(override val containerView: View) :
         RecyclerView.ViewHolder(containerView), LayoutContainer {
+        val totalPriceTv=containerView.findViewById<TextView>(R.id.totalPriceTv)
+        val shippingCostTv=containerView.findViewById<TextView>(R.id.shippingCostTv)
+        val payablePriceTv=containerView.findViewById<TextView>(R.id.payablePriceTv)
         fun bind(totalPrice: Int, shippingCost: Int, payablePrice: Int) {
-            containerView.totalPriceTv.text = formatPrice(totalPrice)
-            containerView.shippingCostTv.text = formatPrice(shippingCost)
-            containerView.payablePriceTv.text = formatPrice(payablePrice)
+            totalPriceTv.text = formatPrice(totalPrice)
+            shippingCostTv.text = formatPrice(shippingCost)
+            payablePriceTv.text = formatPrice(payablePrice)
         }
     }
 

@@ -3,6 +3,21 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/rahim/AndroidStudioProjects/NikeStore/app/src/main/res/layout/activity_comment_list.xml" value="0.10104166666666667" />
+        <entry key="..\:/Users/rahim/AndroidStudioProjects/NikeStore/app/src/main/res/layout/activity_main.xml" value="0.10104166666666667" />
+        <entry key="..\:/Users/rahim/AndroidStudioProjects/NikeStore/app/src/main/res/layout/activity_product_detail.xml" value="0.10104166666666667" />
+        <entry key="..\:/Users/rahim/AndroidStudioProjects/NikeStore/app/src/main/res/layout/activity_product_list.xml" value="0.10104166666666667" />
+        <entry key="..\:/Users/rahim/AndroidStudioProjects/NikeStore/app/src/main/res/layout/activity_shipping.xml" value="0.10104166666666667" />
+        <entry key="..\:/Users/rahim/AndroidStudioProjects/NikeStore/app/src/main/res/layout/fragment_cart.xml" value="0.10104166666666667" />
+        <entry key="..\:/Users/rahim/AndroidStudioProjects/NikeStore/app/src/main/res/layout/fragment_home.xml" value="0.10104166666666667" />
+        <entry key="..\:/Users/rahim/AndroidStudioProjects/NikeStore/app/src/main/res/layout/fragment_login.xml" value="0.1381340579710145" />
+        <entry key="..\:/Users/rahim/AndroidStudioProjects/NikeStore/app/src/main/res/layout/fragment_profile.xml" value="0.10104166666666667" />
+        <entry key="..\:/Users/rahim/AndroidStudioProjects/NikeStore/app/src/main/res/layout/fragment_sign_up.xml" value="0.10104166666666667" />
+        <entry key="..\:/Users/rahim/AndroidStudioProjects/NikeStore/app/src/main/res/layout/item_cart.xml" value="0.10104166666666667" />
+        <entry key="..\:/Users/rahim/AndroidStudioProjects/NikeStore/app/src/main/res/layout/item_favorite_product.xml" value="0.10104166666666667" />
+        <entry key="..\:/Users/rahim/AndroidStudioProjects/NikeStore/app/src/main/res/layout/item_purchase_details.xml" value="0.10104166666666667" />
+        <entry key="..\:/Users/rahim/AndroidStudioProjects/NikeStore/app/src/main/res/layout/view_cart_empty_state.xml" value="0.10104166666666667" />
+        <entry key="..\:/Users/rahim/AndroidStudioProjects/NikeStore/app/src/main/res/layout/view_toolbar.xml" value="0.10104166666666667" />
         <entry key="..\:/Users/rahim/AndroidStudioProjects/NikeStore/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.15" />
       </map>
     </option>

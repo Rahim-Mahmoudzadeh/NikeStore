@@ -3,6 +3,8 @@ package com.sevenlearn.nikestore.feature.favorites
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Button
+import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
@@ -11,8 +13,7 @@ import com.sevenlearn.nikestore.common.EXTRA_KEY_DATA
 import com.sevenlearn.nikestore.common.NikeActivity
 import com.sevenlearn.nikestore.data.Product
 import com.sevenlearn.nikestore.feature.product.ProductDetailActivity
-import kotlinx.android.synthetic.main.activity_favorite_products.*
-import kotlinx.android.synthetic.main.view_default_empty_state.*
+
 import org.koin.android.ext.android.get
 import org.koin.android.ext.android.inject
 
@@ -22,7 +23,9 @@ class FavoriteProductsActivity : NikeActivity(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_favorite_products)
-
+        val helpBtn=findViewById<Button>(R.id.helpBtn)
+        val favoriteProductsRv=findViewById<RecyclerView>(R.id.favoriteProductsRv)
+        val emptyStateMessageTv=findViewById<TextView>(R.id.emptyStateMessageTv)
         helpBtn.setOnClickListener {
             Snackbar.make(it, R.string.favorites_help_message, Snackbar.LENGTH_LONG).show()
         }

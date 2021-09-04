@@ -5,9 +5,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
+import android.widget.TextView
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.button.MaterialButton
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.sevenlearn.nikestore.R
 import com.sevenlearn.nikestore.common.EXTRA_KEY_DATA
 import com.sevenlearn.nikestore.common.NikeCompletableObserver
@@ -20,9 +24,6 @@ import com.sevenlearn.nikestore.services.ImageLoadingService
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.fragment_cart.*
-import kotlinx.android.synthetic.main.view_cart_empty_state.*
-import kotlinx.android.synthetic.main.view_cart_empty_state.view.*
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 import timber.log.Timber
@@ -32,6 +33,8 @@ class CartFragment : NikeFragment(), CartItemAdapter.CartItemViewCallbacks {
     var cartItemAdapter: CartItemAdapter? = null
     val imageLoadingService: ImageLoadingService by inject()
     val compositeDisposable = CompositeDisposable()
+    var cartItemsRv:RecyclerView?=null
+    var payBtn: ExtendedFloatingActionButton?=null
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -42,17 +45,19 @@ class CartFragment : NikeFragment(), CartItemAdapter.CartItemViewCallbacks {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        cartItemsRv=view.findViewById(R.id.cartItemsRv)
+        payBtn=view.findViewById(R.id.payBtn)
         viewModel.progressBarLiveData.observe(viewLifecycleOwner) {
             setProgressIndicator(it)
         }
 
         viewModel.cartItemsLiveData.observe(viewLifecycleOwner) {
             Timber.i(it.toString())
-            cartItemsRv.layoutManager =
+            cartItemsRv?.layoutManager =
                 LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
             cartItemAdapter =
                 CartItemAdapter(it as MutableList<CartItem>, imageLoadingService, this)
-            cartItemsRv.adapter = cartItemAdapter
+            cartItemsRv?.adapter = cartItemAdapter
         }
 
         viewModel.purchaseDetailLiveData.observe(viewLifecycleOwner) {
@@ -64,14 +69,19 @@ class CartFragment : NikeFragment(), CartItemAdapter.CartItemViewCallbacks {
         }
 
         viewModel.emptyStateLiveData.observe(viewLifecycleOwner) {
+            var emptyStateRootView : FrameLayout?=null
             if (it.mustShow) {
                 val emptyState = showEmptyState(R.layout.view_cart_empty_state)
-
+                var emptyStateMessageTv:TextView?=null
+                var emptyStateCtaBtn: MaterialButton?=null
                 emptyState?.let { view ->
-                    view.emptyStateMessageTv.text = getString(it.messageResId)
-                    view.emptyStateCtaBtn.visibility =
+                    emptyStateMessageTv=view.findViewById(R.id.emptyStateMessageTv)
+                    emptyStateCtaBtn=view.findViewById(R.id.emptyStateCtaBtn)
+                    emptyStateRootView=view.findViewById(R.id.emptyStateRootView)
+                    emptyStateMessageTv?.text = getString(it.messageResId)
+                    emptyStateCtaBtn?.visibility =
                         if (it.mustShowCallToActionButton) View.VISIBLE else View.GONE
-                    view.emptyStateCtaBtn.setOnClickListener {
+                   emptyStateCtaBtn?.setOnClickListener {
                         startActivity(Intent(requireContext(), AuthActivity::class.java))
                     }
                 }
@@ -79,7 +89,7 @@ class CartFragment : NikeFragment(), CartItemAdapter.CartItemViewCallbacks {
                 emptyStateRootView?.visibility = View.GONE
         }
 
-        payBtn.setOnClickListener {
+        payBtn?.setOnClickListener {
             startActivity(Intent(requireContext(), ShippingActivity::class.java).apply {
                 putExtra(EXTRA_KEY_DATA, viewModel.purchaseDetailLiveData.value)
             })

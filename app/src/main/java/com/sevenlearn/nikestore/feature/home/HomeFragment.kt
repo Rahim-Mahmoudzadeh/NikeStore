@@ -7,6 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.ViewPager2
+import com.google.android.material.button.MaterialButton
 import com.sevenlearn.nikestore.R
 import com.sevenlearn.nikestore.common.EXTRA_KEY_DATA
 import com.sevenlearn.nikestore.common.NikeFragment
@@ -18,7 +20,7 @@ import com.sevenlearn.nikestore.feature.common.VIEW_TYPE_ROUND
 import com.sevenlearn.nikestore.feature.list.ProductListActivity
 import com.sevenlearn.nikestore.feature.main.BannerSliderAdapter
 import com.sevenlearn.nikestore.feature.product.ProductDetailActivity
-import kotlinx.android.synthetic.main.fragment_home.*
+import com.tbuonomo.viewpagerdotsindicator.DotsIndicator
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -37,6 +39,10 @@ class HomeFragment : NikeFragment(), ProductListAdapter.ProductEventListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        var latestProductsRv=view.findViewById<RecyclerView>(R.id.latestProductsRv)
+        val viewLatestProductsBtn=view.findViewById<MaterialButton>(R.id.viewLatestProductsBtn)
+        val bannerSliderViewPager=view.findViewById<ViewPager2>(R.id.bannerSliderViewPager)
+        val sliderIndicator=view.findViewById<DotsIndicator>(R.id.sliderIndicator)
         latestProductsRv.layoutManager =
             LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
         latestProductsRv.adapter = productListAdapter
