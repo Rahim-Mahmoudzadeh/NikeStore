@@ -1,4 +1,4 @@
-package com.sevenlearn.nikestore.services
+    package com.sevenlearn.nikestore.services
 
 import com.facebook.drawee.view.SimpleDraweeView
 import com.sevenlearn.nikestore.view.NikeImageView
